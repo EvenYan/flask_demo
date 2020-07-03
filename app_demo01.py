@@ -20,7 +20,7 @@ def get_info():
 
 @app.route("/get_data")
 def get_data():
-    demo_data = ["苹果", "梨子", "香蕉", "橙子"]
+    demo_data = {"水果名称": ["苹果", "梨子", "香蕉", "橙子"], "水果销量": [14, 67, 23, 130]}
     return jsonify(demo_data)
 
 
