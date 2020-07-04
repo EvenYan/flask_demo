@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, render_template, request, redirect, url_for
 import json
+
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from werkzeug.routing import BaseConverter
+
 
 app = Flask(__name__)
 
@@ -36,11 +38,25 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        username = request.form.get("username")
+        username = request.form.getlist("username")
         passwd = request.form.get("passwd")
+        print(username, passwd)
         url = url_for('index')
         return redirect(url)
 
+
+@app.route("/upload", methods=["POST", "GET"])
+def upload():
+    if request.method == "GET":
+        return render_template("upload.html")
+    elif request.method == "POST":
+        file = request.files.get("pic")
+        if file:
+            file.save("./pic.png")
+            return "上传成功"
+        else:
+            return "文件上传失败"
+        
 
 @app.route("/post/<post_id>")
 def get_post(post_id):
@@ -75,3 +91,5 @@ def call():
 if __name__ == "__main__":
     print(app.url_map)
     app.run(debug=True)
+
+
