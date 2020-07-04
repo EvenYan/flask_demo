@@ -10,6 +10,13 @@
 </head>
 
 <body>
+
+    {% if username %}
+        欢迎你回来，{{ username }} <br>
+    {% else %}
+        游客请先<a href="/register">登录</a> 
+    {% endif %}
+
     <button id="btn_1">点击echarts.js表</button>
     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
     <div id="main" style="width: 600px;height:400px;"></div>

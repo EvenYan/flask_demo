@@ -1,6 +1,6 @@
 import json
 
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for, make_response
 from werkzeug.routing import BaseConverter
 
 
@@ -9,12 +9,15 @@ app = Flask(__name__)
 
 @app.route("/home")
 def index():
-    return render_template("index.html")
+    username = request.cookies.get('user')
+    return render_template("index.html", username=username)
 
 
 
-@app.route("/", methods=["POST"])
+@app.route("/")
 def home():
+    kw = request.args.get('wd')
+    print(kw)
     return "欢迎来到我的首页"
 
 
@@ -38,11 +41,12 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        username = request.form.getlist("username")
+        username = request.form.get("username")
         passwd = request.form.get("passwd")
         print(username, passwd)
-        url = url_for('index')
-        return redirect(url)
+        resp = make_response(redirect(url_for('index')))
+        resp.set_cookie("user", username, max_age=60)
+        return resp
 
 
 @app.route("/upload", methods=["POST", "GET"])
