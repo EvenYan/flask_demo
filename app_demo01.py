@@ -1,15 +1,26 @@
-import json
+import json, hashlib
 
-from flask import Flask, jsonify, render_template, request, redirect, url_for, make_response
+from flask import Flask, jsonify, render_template, request, redirect, url_for, make_response, g
 from werkzeug.routing import BaseConverter
 
 
 app = Flask(__name__)
 
 
+def gen_secret():
+    md5 = hashlib.md5()
+    md5.update(g.username.encode())
+    print(md5.hexdigest())
+    return md5.hexdigest()
+
+
 @app.route("/home")
-def index():
+def index():   
     username = request.cookies.get('user')
+    g.username = username
+    secret_username = gen_secret()
+    print(secret_username)
+    print(secret_username)
     return render_template("index.html", username=username)
 
 
